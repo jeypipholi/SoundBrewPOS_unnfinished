@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SoundBrewPOS.ManageMenuItems"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SoundBrewPOS.Controls"
+    xmlns:data="clr-namespace:SoundBrewPOS.Data"
+    xmlns:local="clr-namespace:SoundBrewPOS.Converters"
+    xmlns:models="clr-namespace:SoundBrewPOS.Models"
+    xmlns:vm="clr-namespace:SoundBrewPOS.ViewModels"
+    Title="ManageMenuItems"
+    x:DataType="vm:HomeViewModel"
+    Shell.NavBarIsVisible="False">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="txtEntry" TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="white" />
+                <Setter Property="PlaceholderColor" Value="Black" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="MinimumHeightRequest" Value="12" />
+            </Style>
+            <Style x:Key="lbl" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <Grid ColumnDefinitions=".75*,.25*">
+        <Grid
+            Grid.Column="0"
+            Padding="15"
+            RowDefinitions="Auto,Auto,*"
+            RowSpacing="10">
+
+            <Label
+                Grid.Row="0"
+                FontAttributes="Bold"
+                FontFamily="PoppinsBold"
+                FontSize="24"
+                HorizontalOptions="Start"
+                Text="Menu Management" />
+
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Categories}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MenuCategoryModel">
+                        <Border
+                            Margin="5"
+                            Padding="20,10"
+                            Background="{Binding IsSelected, Converter={StaticResource BooleanToColorConverter}}"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0">
+
+                            <HorizontalStackLayout Spacing="5">
+                                <Image
+                                    HeightRequest="20"
+                                    Source="{Binding Icon}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="20" />
+                                <Label
+                                    FontSize="16"
+                                    Text="{Binding Name}"
+                                    VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=SelectCategoryCommand}" CommandParameter="{Binding Id}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Grid Grid.Row="2">
+                <!--  CollectionView for the Items  -->
+                <CollectionView ItemsSource="{Binding MenuItems}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="10"
+                            Orientation="Vertical"
+                            Span="4"
+                            VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="data:MenuItem">
+                            <Border
+                                Padding="10"
+                                Stroke="#DDD"
+                                StrokeShape="RoundRectangle 10">
+                                <VerticalStackLayout Spacing="3">
+                                    <Border
+                                        Background="{StaticResource OrderSummaryColor}"
+                                        HeightRequest="150"
+                                        StrokeThickness="0">
+                                        <Image
+                                            Aspect="Fill"
+                                            HeightRequest="170"
+                                            HorizontalOptions="Center"
+                                            Source="{Binding Icon}"
+                                            VerticalOptions="Center"
+                                            WidthRequest="250" />
+                                    </Border>
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontFamily="PoppinsBold"
+                                        FontSize="14"
+                                        Text="{Binding Name}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="12"
+                                        Text="{Binding Description}" />
+                                    <FlexLayout
+                                        Padding="10"
+                                        AlignItems="Center"
+                                        JustifyContent="SpaceBetween">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontFamily="PoppinsBold"
+                                            FontSize="16"
+                                            Text="{Binding Price, StringFormat='₱{0:N2}'}"
+                                            TextColor="Maroon"
+                                            VerticalOptions="Center" />
+
+                                        <ImageButton
+                                            Margin="0,0,0,1"
+                                            BackgroundColor="DarkSeaGreen"
+                                            BorderColor="Transparent"
+                                            Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=EditMenuItemsCommand}"
+                                            CommandParameter="{Binding .}"
+                                            CornerRadius="5"
+                                            HeightRequest="25"
+                                            Source="edit_button.png"
+                                            WidthRequest="25" />
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=EditMenuItemsCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <BoxView
+                    HorizontalOptions="Fill"
+                    IsVisible="{Binding IsBusy}"
+                    Opacity="0.5"
+                    VerticalOptions="Fill"
+                    Color="{StaticResource OrderSummaryColor}" />
+                <ActivityIndicator
+                    HeightRequest="25"
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    VerticalOptions="Center"
+                    WidthRequest="25"
+                    Color="Maroon" />
+            </Grid>
+        </Grid>
+
+
+
+        <Grid
+            Grid.Column="1"
+            Padding="10"
+            BackgroundColor="{StaticResource OrderSummaryColor}"
+            RowDefinitions="Auto,*">
+            <VerticalStackLayout Grid.Row="0" Spacing="5">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Edit Menu Item" />
+                <controls:CurrentDateTimeControl />
+            </VerticalStackLayout>
+            <!--  Main Content Section  -->
+            <Grid
+                Grid.Row="1"
+                Padding="5"
+                BackgroundColor="{StaticResource Flyout}">
+                <!--  - Save Menu Item Form  -->
+
+                <ScrollView>
+                    <VerticalStackLayout Spacing="2">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Style="{StaticResource lbl}" Text="Name" />
+                            <Entry
+                                x:Name="nametxt"
+                                Placeholder="Enter Name"
+                                Style="{StaticResource txtEntry}"
+                                Text="{Binding SelectedMenuItem.Name}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Style="{StaticResource lbl}" Text="Image/Icon" />
+                            <Border
+                                BackgroundColor="{StaticResource OrderSummaryColor}"
+                                HeightRequest="100"
+                                HorizontalOptions="Center"
+                                StrokeThickness="0"
+                                VerticalOptions="Center"
+                                WidthRequest="100">
+                                <!-- <Image
+                                    x:Name="imagepath"
+                                    HeightRequest="100"
+                                    WidthRequest="100">
+                                    <Image.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding SelectedMenuItem.Icon}"
+                                            TargetType="Image"
+                                            Value="{x:Null}">
+                                            <Setter Property="Source" Value="{Binding SelectedImagePath}" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding SelectedMenuItem.Icon}"
+                                            TargetType="Image"
+                                            Value="">
+                                            <Setter Property="Source" Value="{Binding SelectedImagePath}" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                    <Image.Source>
+                                        <Binding Path="SelectedMenuItem.Icon" />
+                                    </Image.Source>
+                                </Image>-->
+                                <!--<Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="36"
+                                    Source="image.png"
+                                    WidthRequest="36" />-->
+
+                                <Image
+                                    x:Name="imagepath"
+                                    HeightRequest="100"
+                                    WidthRequest="100">
+                                    <Image.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding SelectedMenuItem.Icon, Converter={StaticResource NullOrEmptyConverter}}"
+                                            TargetType="Image"
+                                            Value="true">
+                                            <Setter Property="Source" Value="{Binding SelectedImagePath}" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </Border>
+                            <Button
+                                Margin="0,2,0,0"
+                                BackgroundColor="DarkOliveGreen"
+                                Command="{Binding PickImageCommand}"
+                                HorizontalOptions="Center"
+                                MinimumHeightRequest="30"
+                                Text="Pick Image" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Style="{StaticResource lbl}" Text="Price" />
+                            <Entry
+                                x:Name="priceEntry"
+                                Placeholder="Enter Price"
+                                Style="{StaticResource txtEntry}"
+                                Text="{Binding SelectedMenuItem.Price}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Style="{StaticResource lbl}" Text="Description" />
+                            <Editor
+                                x:Name="description"
+                                MinimumHeightRequest="100"
+                                Placeholder="Enter description"
+                                Style="{StaticResource txtEntry}"
+                                Text="{Binding SelectedMenuItem.Description}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="2">
+
+                            <!--  Category Collection View  -->
+                            <Picker
+                                Title="Choose a category"
+                                BackgroundColor="White"
+                                ItemsSource="{Binding Categories}"
+                                SelectedItem="{Binding SelectCategoryCommand}">
+                                <Picker.ItemDisplayBinding>
+                                    <Binding x:Name="categoryPicker" Path="Name" />
+                                </Picker.ItemDisplayBinding>
+                            </Picker>
+
+
+                        </VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
+                            <Button
+                                Grid.Column="0"
+                                BackgroundColor="Red"
+                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=CancelEditCommand}"
+                                CommandParameter="{Binding .}"
+                                HorizontalOptions="Start"
+                                Pressed="Button_Pressed"
+                                Released="Button_Released"
+                                Text="Cancel" />
+
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="Green"
+                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=SaveMenuItemCommand}"
+                                CommandParameter="{Binding .}"
+                                Pressed="Button_Pressed"
+                                Released="Button_Released"
+                                Text="Save" />
+
+
+                        </Grid>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

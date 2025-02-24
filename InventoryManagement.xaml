@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SoundBrewPOS.InventoryManagement"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SoundBrewPOS.Controls"
+    xmlns:data="clr-namespace:SoundBrewPOS.Data"
+    xmlns:local="clr-namespace:SoundBrewPOS.Converters"
+    xmlns:models="clr-namespace:SoundBrewPOS.Models"
+    xmlns:vm="clr-namespace:SoundBrewPOS.ViewModels"
+    x:DataType="vm:InventoryManagementViewModel"
+    Shell.NavBarIsVisible="False">
+
+
+    <Grid ColumnDefinitions=".75*,.25*">
+        <Grid Grid.Column="0" BackgroundColor="{StaticResource OrderSummaryColor}">
+            <Label
+                Padding="5"
+                FontAttributes="Bold"
+                FontSize="25"
+                Text="Inventory Management" />
+
+
+        </Grid>
+        <Grid
+            Grid.Column="1"
+            BackgroundColor="AliceBlue"
+            RowDefinitions="Auto,*">
+            <VerticalStackLayout Grid.Row="0" Spacing="5">
+                <Picker
+                    Title="Choose Menu Item"
+                    Margin="0,2,0,0"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding AllMenuItems}"
+                    SelectedItem="{Binding SelectedMenuItem}"
+                    WidthRequest="250" />
+                <Button
+                    BackgroundColor="DarkRed"
+                    Command="{Binding DeleteMenuItemCommand}"
+                    Text="Delete"
+                    WidthRequest="120" />
+            </VerticalStackLayout>
+            <Grid Grid.Row="1">
+                <ScrollView>
+                    <VerticalStackLayout Padding="2" Spacing="3">
+                        <Label Text="Name" />
+                        <Entry Placeholder="Enter Name" Text="{Binding NewItemName}" />
+                        <Label Text="Image/Icon" />
+                        <Border
+                            BackgroundColor="{StaticResource OrderSummaryColor}"
+                            HeightRequest="100"
+                            HorizontalOptions="Center"
+                            StrokeThickness="0"
+                            VerticalOptions="Center"
+                            WidthRequest="100" />
+                        <Button
+                            Margin="0,2,0,0"
+                            BackgroundColor="DarkOliveGreen"
+                            HorizontalOptions="Center"
+                            MinimumHeightRequest="30"
+                            Text="Pick Image" />
+                        <Label Text="Price" />
+                        <Entry
+                            Keyboard="Numeric"
+                            Placeholder="Enter Price"
+                            Text="{Binding NewItemPrice}" />
+                        <Label Text="Description" />
+                        <Editor MinimumHeightRequest="100" Placeholder="Enter description" />
+                        <Picker
+                            Title="Choose Category"
+                            Margin="0,2,0,0"
+                            ItemDisplayBinding="{Binding Name}"
+                            ItemsSource="{Binding Categories}"
+                            SelectedItem="{Binding NewItemCategoryId}"
+                            WidthRequest="250" />
+                        <Button
+                            BackgroundColor="Green"
+                            Text="Save"
+                            WidthRequest="120" />
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
+        </Grid>
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SoundBrewPOS.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SoundBrewPOS"
+    Shell.FlyoutBackgroundColor="{StaticResource Flyout}"
+    Shell.FlyoutBehavior="Locked"
+    Shell.FlyoutWidth="65">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Icon="home.png"
+        Route="MainPage" />
+
+    <ShellContent
+        Title="Orders"
+        ContentTemplate="{DataTemplate local:OrdersPage}"
+        Icon="history.png"
+        Route="OrdersPage" />
+
+    <ShellContent
+        Title="Manage Menu"
+        ContentTemplate="{DataTemplate local:ManageMenuItems}"
+        Icon="menu_button.png"
+        Route="Manage Menu" />
+
+    <ShellContent
+        Title="Inventory Management"
+        ContentTemplate="{DataTemplate local:InventoryManagement}"
+        Icon="inventory_management.png"
+        Route="InventoryManagement" />
+
+
+
+
+
+</Shell>
